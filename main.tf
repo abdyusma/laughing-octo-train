@@ -58,6 +58,7 @@ resource "azurerm_private_endpoint" "main" {
   custom_network_interface_name = azurerm_network_interface.main.name
 
   private_dns_zone_group {
+    name = "default"
     private_dns_zone_ids = [azurerm_private_dns_zone.main.id]
   }
 
