@@ -16,9 +16,8 @@ resource "azurerm_storage_account" "main" {
   resource_group_name      = data.azurerm_resource_group.main.name
   location                 = data.azurerm_resource_group.main.location
   account_tier             = "Standard"
-  account_replication_type = "GRS"
+  account_replication_type = "LRS"
 
-  cross_tenant_replication_enabled = true
   min_tls_version                  = "TLS1_0"
 
   tags = {
@@ -63,7 +62,7 @@ resource "azurerm_private_endpoint" "main" {
   }
 
   private_service_connection {
-    name                           = "main-privateserviceconnection"
+    name                           = "cmyendpoint"
     private_connection_resource_id = azurerm_storage_account.main.id
     is_manual_connection           = false
     subresource_names = [
