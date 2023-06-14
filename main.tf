@@ -19,7 +19,7 @@ resource "azurerm_storage_account" "main" {
   account_replication_type = "GRS"
 
   cross_tenant_replication_enabled = true
-  min_tls_version = "TLS1_0"
+  min_tls_version                  = "TLS1_0"
 
   tags = {
     environment = "test"
@@ -58,7 +58,7 @@ resource "azurerm_private_endpoint" "main" {
   custom_network_interface_name = azurerm_network_interface.main.name
 
   private_dns_zone_group {
-    name = "default"
+    name                 = "default"
     private_dns_zone_ids = [azurerm_private_dns_zone.main.id]
   }
 
