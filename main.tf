@@ -51,9 +51,6 @@ resource "azurerm_network_interface" "main" {
     private_ip_address_allocation = "Dynamic"
     subnet_id                     = data.azurerm_subnet.main.id
   }
-
-  tags = local.tags
-
 }
 
 resource "azurerm_private_endpoint" "main" {
