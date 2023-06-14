@@ -2,6 +2,12 @@ provider "azurerm" {
   features {}
 }
 
+locals {
+  tags = {
+    environment = "test"
+  }
+}
+
 data "azurerm_resource_group" "main" {
   name = "cmydevops"
 }
@@ -20,14 +26,13 @@ resource "azurerm_storage_account" "main" {
 
   min_tls_version                  = "TLS1_0"
 
-  tags = {
-    environment = "test"
-  }
+  tags = local.tags
 }
 
 resource "azurerm_private_dns_zone" "main" {
   name                = "privatelink.blob.core.windows.net"
   resource_group_name = data.azurerm_resource_group.main.name
+  tags = local.tags
 }
 
 data "azurerm_subnet" "main" {
@@ -46,6 +51,9 @@ resource "azurerm_network_interface" "main" {
     private_ip_address_allocation = "Dynamic"
     subnet_id                     = data.azurerm_subnet.main.id
   }
+
+  tags = local.tags
+
 }
 
 resource "azurerm_private_endpoint" "main" {
@@ -69,4 +77,5 @@ resource "azurerm_private_endpoint" "main" {
       "blob"
     ]
   }
+  tags = local.tags
 }
