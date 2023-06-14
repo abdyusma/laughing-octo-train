@@ -24,7 +24,7 @@ resource "azurerm_storage_account" "main" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
-  min_tls_version                  = "TLS1_0"
+  min_tls_version = "TLS1_0"
 
   tags = local.tags
 }
@@ -32,7 +32,7 @@ resource "azurerm_storage_account" "main" {
 resource "azurerm_private_dns_zone" "main" {
   name                = "privatelink.blob.core.windows.net"
   resource_group_name = data.azurerm_resource_group.main.name
-  tags = local.tags
+  tags                = local.tags
 }
 
 data "azurerm_subnet" "main" {
