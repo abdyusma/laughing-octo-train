@@ -42,6 +42,7 @@ resource "azurerm_network_interface" "main" {
   ip_configuration {
     name                          = "privateEndpointIpConfig.06e48e88-f1a7-4c7c-8604-1b07d0d8c5ba"
     private_ip_address_allocation = "Dynamic"
+    subnet_id                     = data.azurerm_subnet.main.id
   }
 }
 
@@ -51,9 +52,14 @@ resource "azurerm_private_endpoint" "main" {
   location            = data.azurerm_resource_group.main.location
   subnet_id           = data.azurerm_subnet.main.id
 
+  custom_network_interface_name = azurerm_network_interface.main.name
+
   private_service_connection {
     name                           = "main-privateserviceconnection"
     private_connection_resource_id = azurerm_storage_account.main.id
     is_manual_connection           = false
+    subresource_names = [
+      "blob"
+    ]
   }
 }
