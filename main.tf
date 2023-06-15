@@ -17,24 +17,6 @@ data "azurerm_virtual_network" "main" {
   resource_group_name = data.azurerm_resource_group.main.name
 }
 
-resource "azurerm_storage_account" "main" {
-  name                     = "cmydevops"
-  resource_group_name      = data.azurerm_resource_group.main.name
-  location                 = data.azurerm_resource_group.main.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-
-  min_tls_version = "TLS1_0"
-
-  tags = local.tags
-}
-
-resource "azurerm_private_dns_zone" "main" {
-  name                = "privatelink.blob.core.windows.net"
-  resource_group_name = data.azurerm_resource_group.main.name
-  tags                = local.tags
-}
-
 data "azurerm_subnet" "main" {
   name                 = "cmydevopsSubnet"
   resource_group_name  = data.azurerm_resource_group.main.name
@@ -51,6 +33,33 @@ resource "azurerm_network_interface" "main" {
     private_ip_address_allocation = "Dynamic"
     subnet_id                     = data.azurerm_subnet.main.id
   }
+}
+
+resource "azurerm_private_dns_zone" "main" {
+  name                = "privatelink.blob.core.windows.net"
+  resource_group_name = data.azurerm_resource_group.main.name
+  tags                = local.tags
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "main" {
+  name                = "6i2dd5veyofay"
+  resource_group_name = data.azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
+  virtual_network_id  = data.azurerm_virtual_network.main.id
+
+  tags = local.tags
+}
+
+resource "azurerm_storage_account" "main" {
+  name                     = var.prefix
+  resource_group_name      = data.azurerm_resource_group.main.name
+  location                 = data.azurerm_resource_group.main.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+
+  min_tls_version = "TLS1_0"
+
+  tags = local.tags
 }
 
 resource "azurerm_private_endpoint" "main" {
@@ -75,4 +84,12 @@ resource "azurerm_private_endpoint" "main" {
     ]
   }
   tags = local.tags
+}
+
+resource "azurerm_private_dns_a_record" "main" {
+  name                = "cmydevops"
+  resource_group_name = data.azurerm_resource_group.main.name
+  zone_name           = azurerm_private_dns_zone.main.name
+  ttl                 = "10"
+  records             = [azurerm_network_interface.main.private_ip_address]
 }
