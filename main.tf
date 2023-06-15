@@ -45,6 +45,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "main" {
   name                = "6i2dd5veyofay"
   resource_group_name = data.azurerm_resource_group.main.name
   virtual_network_id  = data.azurerm_virtual_network.main.id
+  private_dns_zone_name = azurerm_private_dns_zone.main.name
 
   tags = local.tags
 }
