@@ -51,7 +51,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "main" {
 }
 
 resource "azurerm_storage_account" "main" {
-  name                     = var.prefix
+  name                     = "cmydevops"
   resource_group_name      = data.azurerm_resource_group.main.name
   location                 = data.azurerm_resource_group.main.location
   account_tier             = "Standard"
