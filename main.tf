@@ -35,20 +35,19 @@ data "azurerm_subnet" "main" {
 #   }
 # }
 
-# resource "azurerm_private_dns_zone" "main" {
-#   name                = "privatelink.blob.core.windows.net"
-#   resource_group_name = data.azurerm_resource_group.main.name
-#   tags                = local.tags
-# }
+resource "azurerm_private_dns_zone" "main" {
+  name                = "privatelink.blob.core.windows.net"
+  resource_group_name = data.azurerm_resource_group.main.name
+  tags                = local.tags
+}
 
-# resource "azurerm_private_dns_zone_virtual_network_link" "main" {
-#   name                = "6i2dd5veyofay"
-#   resource_group_name = data.azurerm_resource_group.main.name
-#   virtual_network_id  = data.azurerm_virtual_network.main.id
-#   private_dns_zone_name = azurerm_private_dns_zone.main.name
-
-#   tags = local.tags
-# }
+resource "azurerm_private_dns_zone_virtual_network_link" "main" {
+  name                  = "6i2dd5veyofay"
+  resource_group_name   = data.azurerm_resource_group.main.name
+  virtual_network_id    = data.azurerm_virtual_network.main.id
+  private_dns_zone_name = azurerm_private_dns_zone.main.name
+  tags                  = local.tags
+}
 
 resource "azurerm_storage_account" "main" {
   name                     = "cmydevops"
